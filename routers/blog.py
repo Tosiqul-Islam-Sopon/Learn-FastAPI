@@ -4,6 +4,7 @@ from typing import List
 from repository import blog
 import schemas
 import database
+import oauth2
 
 router = APIRouter(
     prefix='/blogs',
@@ -12,7 +13,7 @@ router = APIRouter(
 
 
 @router.get('', status_code=status.HTTP_200_OK, response_model= List[schemas.ShowBlog])
-def get_all_blogs(db: Session = Depends(database.get_db)):
+def get_all_blogs(db: Session = Depends(database.get_db), current_user: schemas.User = Depends(oauth2.get_current_user)):
     return blog.get_all_blogs(db)
 
 
