@@ -1,6 +1,9 @@
+fastapi
 uvicorn
 sqlalchemy
-passlib
-bcrypt
-python-jose
+passlib[bcrypt]
+python-jose[cryptography]
 python-multipart
+pydantic[email]
+pydantic-settings
+python-dotenv
