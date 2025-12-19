@@ -15,6 +15,10 @@ def get_all_users(db: Session = Depends(get_db)):
 def create_user(data: UserCreate, db: Session = Depends(get_db)):
     return crud_user.create_user(db, data)
 
+@router.get('/email/{email}', status_code=status.HTTP_200_OK, response_model=ShowUser)
+def get_user_by_email(email: str, db: Session = Depends(get_db)):
+    return crud_user.get_user_by_email(db, email)
+
 @router.get('/{id}', status_code=status.HTTP_200_OK, response_model=ShowUser)
 def get_user_by_id(id: int, db: Session = Depends(get_db)):
     return crud_user.get_user_by_id(db, id)

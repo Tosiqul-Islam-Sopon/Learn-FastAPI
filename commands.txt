@@ -1,3 +1,6 @@
-run with uvicorn: uvicorn p1:app --reload
+run with uvicorn: uvicorn app.main:app --reload
 
 intall dependencies: pip install -r requirements.txt
+
+avtivate virtual environment: source /home/sopon/FastAPI/fastapi-env/bin/activate
+
