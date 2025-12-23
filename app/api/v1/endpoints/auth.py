@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.core.security import verify_password, create_access_token, create_refresh_token, verify_refresh_token
 from app.models.user import User
+from app.schemas.auth import RefreshTokenRequest
 
 router = APIRouter()
 
@@ -30,8 +31,8 @@ def login(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get
     }
 
 @router.post("/refresh")
-def refresh(refresh_token: str = Body(...), db: Session = Depends(get_db)):
-    user = verify_refresh_token(refresh_token, db)
+def refresh(payload: RefreshTokenRequest, db: Session = Depends(get_db)):
+    user = verify_refresh_token(payload.refresh_token, db)
 
     # Create new access token
     new_access_token = create_access_token({"sub": user.email})

@@ -46,24 +46,22 @@ def verify_refresh_token(refresh_token: str, db: Session):
         payload = jwt.decode(
             refresh_token,
             settings.SECRET_KEY,
-            algorithms=[settings.ALGORITHM]
+            algorithms=[settings.ALGORITHM],
         )
 
         if payload.get("scope") != "refresh_token":
-            raise HTTPException(status_code=401, detail="Invalid scope")
+            raise HTTPException(status_code=401, detail="Invalid token scope")
 
         email = payload.get("sub")
-        if email is None:
+        if not email:
             raise HTTPException(status_code=401, detail="Invalid token")
 
         user = db.query(User).filter(User.email == email).first()
-
-        # Compare refresh token hash stored in DB
-        if not verify_password(refresh_token, user.refresh_token):
-            raise HTTPException(status_code=401, detail="Refresh token revoked")
+        if not user:
+            raise HTTPException(status_code=401, detail="User not found")
 
         return user
 
     except JWTError:
-        raise HTTPException(status_code=401, detail="Invalid refresh token")
+        raise HTTPException(status_code=401, detail="Invalid or expired refresh token")
 
